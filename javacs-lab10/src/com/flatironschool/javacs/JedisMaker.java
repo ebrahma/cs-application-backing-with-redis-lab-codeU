@@ -23,15 +23,14 @@ public class JedisMaker {
 	 * @throws IOException
 	 */
 	public static Jedis make() throws IOException {
-		// assemble the file name
-		String slash = File.separator;
-		String filename = "resources" + slash + "redis_url.txt";
 
+		String slash = File.separator;
+                String filename = "resources" + slash + "redis_url.txt";
 		URL fileURL = JedisMaker.class.getClassLoader().getResource(filename);
                 String filepath = URLDecoder.decode(fileURL.getFile(), "UTF-8");
-		StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
 
-		BufferedReader br;
+                BufferedReader br;
 		try {
                     br = new BufferedReader(new FileReader(filepath));
 		} catch (FileNotFoundException e1) {
@@ -61,12 +60,6 @@ public class JedisMaker {
 
 		String[] array = uri.getAuthority().split("[:@]");
 		String auth = array[1];
-
-		//Here's an older version that read the auth code from an environment variable.
-		//String host = "dory.redistogo.com";
-		//int port = 10534;
-		//String auth = System.getenv("REDISTOGO_AUTH");
-
 		Jedis jedis = new Jedis(host, port);
 
 		try {
@@ -82,10 +75,6 @@ public class JedisMaker {
 		return jedis;
 	}
 
-
-	/**
-	 *
-	 */
 	private static void printInstructions() {
 		System.out.println("");
 		System.out.println("To connect to RedisToGo, you have to provide a file called");
@@ -106,20 +95,16 @@ public class JedisMaker {
 
 		Jedis jedis = make();
 
-		// String
 		jedis.set("mykey", "myvalue");
 		String value = jedis.get("mykey");
 	    System.out.println("Got value: " + value);
 
-	    // Set
 	    jedis.sadd("myset", "element1", "element2", "element3");
 	    System.out.println("element2 is member: " + jedis.sismember("myset", "element2"));
 
-	    // List
 	    jedis.rpush("mylist", "element1", "element2", "element3");
 	    System.out.println("element at index 1: " + jedis.lindex("mylist", 1));
 
-	    // Hash
 	    jedis.hset("myhash", "word1", Integer.toString(2));
 	    jedis.hincrBy("myhash", "word2", 1);
 	    System.out.println("frequency of word1: " + jedis.hget("myhash", "word1"));
